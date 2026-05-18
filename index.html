@@ -1,132 +1,234 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PiruZap</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PiruZap Wear OS</title>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #FFC0CB;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: 1s;
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:#000;
+  color:white;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 /* 💀 MODO MORTO */
-body.morto {
-  filter: grayscale(100%) brightness(0.4) contrast(1.2);
-  background: #2c2c2c !important;
+body.morto{
+  filter:grayscale(100%) brightness(0.5);
 }
 
-.tela {
-  display: none;
-  width: 100%;
-  max-width: 500px;
+.watch{
+
+  width:100%;
+  height:100%;
+  max-width:390px;
+  max-height:390px;
+
+  border-radius:50%;
+  background:#111;
+
+  overflow:hidden;
+  position:relative;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
 }
 
-.ativa {
-  display: block;
+/* TELA */
+
+.tela{
+  display:none;
+  width:100%;
+  height:100%;
+  padding:25px;
+
+  overflow-y:auto;
 }
 
-h1 {
-  margin-top: 30px;
-  color: white;
-  text-align: center;
+.ativa{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
-textarea {
-  width: 90%;
-  height: 150px;
-  border-radius: 15px;
-  border: none;
-  padding: 15px;
-  font-size: 15px;
-  margin-top: 20px;
-  outline: none;
+/* TÍTULO */
+
+h1{
+  font-size:22px;
+  margin-top:10px;
+  margin-bottom:15px;
+  color:#ff5c8a;
 }
 
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
+/* INPUT */
+
+textarea{
+  width:100%;
+  height:110px;
+
+  border:none;
+  border-radius:18px;
+
+  padding:15px;
+
+  resize:none;
+
+  background:#222;
+  color:white;
+
+  outline:none;
+
+  font-size:14px;
 }
 
-.enviar {
-  background: #ff4d6d;
-  color: white;
+/* BOTÕES */
+
+button{
+
+  width:100%;
+  border:none;
+  border-radius:20px;
+
+  padding:12px;
+
+  margin-top:10px;
+
+  font-size:14px;
+  font-weight:bold;
+
+  cursor:pointer;
+
 }
 
-.ver {
-  background: white;
-  color: #ff4d6d;
+.enviar{
+  background:#ff4d6d;
+  color:white;
 }
 
-.voltar {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  background: white;
-  color: #ff4d6d;
-  z-index: 999;
+.ver{
+  background:white;
+  color:#ff4d6d;
 }
 
-.card {
-  background: white;
-  border-radius: 15px;
-  padding: 15px;
-  margin: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+.voltar{
+
+  position:absolute;
+  top:15px;
+  left:15px;
+
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:#fff;
+  color:#ff4d6d;
+
+  font-size:18px;
+
 }
 
-.titulo {
-  font-weight: bold;
-  color: #ff4d6d;
-  margin-bottom: 10px;
+/* CARD */
+
+.card{
+
+  width:100%;
+
+  background:#1f1f1f;
+
+  border-radius:18px;
+
+  padding:15px;
+
+  margin-bottom:12px;
+
 }
 
-.data {
-  font-size: 11px;
-  color: #999;
-  text-align: right;
+.titulo{
+  color:#ff5c8a;
+  font-weight:bold;
+  margin-bottom:8px;
 }
 
-.painelValor {
-  font-size: 25px;
-  font-weight: bold;
-  color: #333;
+.mensagem{
+  font-size:14px;
+  line-height:1.4;
 }
+
+.data{
+  margin-top:8px;
+  font-size:10px;
+  color:#999;
+  text-align:right;
+}
+
+/* PAINEL */
+
+.painelValor{
+  font-size:24px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar{
+  width:0;
+}
+
 </style>
 </head>
 
 <body>
+
+<div class="watch">
 
 <!-- ✍️ TELA PRINCIPAL -->
 <div id="telaEnviar" class="tela ativa">
 
   <h1>PiruZap</h1>
 
-  <textarea id="mensagem" placeholder="Escreve aqui..."></textarea>
+  <textarea id="mensagem" placeholder="Mensagem..."></textarea>
 
-  <button class="enviar" onclick="enviarMensagem()">Enviar</button>
-  <button class="ver" onclick="mostrarRespostas()">Chat dela</button>
-  <button class="ver" onclick="abrirPainel()">Painel</button>
+  <button class="enviar" onclick="enviarMensagem()">
+    Enviar
+  </button>
+
+  <button class="ver" onclick="mostrarRespostas()">
+    Chat
+  </button>
+
+  <button class="ver" onclick="abrirPainel()">
+    Painel
+  </button>
 
 </div>
 
-<!-- 💌 TELA RESPOSTAS -->
+<!-- 💌 RESPOSTAS -->
 <div id="telaRespostas" class="tela">
 
-  <button class="voltar" onclick="voltar()">←</button>
+  <button class="voltar" onclick="voltar()">
+    ←
+  </button>
 
   <h1>💌</h1>
 
@@ -137,135 +239,193 @@ button {
 <!-- 📊 PAINEL -->
 <div id="telaPainel" class="tela">
 
-  <button class="voltar" onclick="voltarPainel()">←</button>
+  <button class="voltar" onclick="voltarPainel()">
+    ←
+  </button>
 
-  <h1>📊 Painel</h1>
+  <h1>Painel</h1>
 
   <div class="card">
-    <div class="titulo">Acessos Sofia</div>
+    <div class="titulo">Acessos</div>
     <div id="acessosSo" class="painelValor">0</div>
   </div>
 
   <div class="card">
-    <div class="titulo">Cartas Sofia</div>
+    <div class="titulo">Cartas</div>
     <div id="cartaSo" class="painelValor">0</div>
   </div>
 
   <div class="card">
-    <div class="titulo">Estado do Site</div>
-    <div id="estadoAtual" class="painelValor">Carregando...</div>
+    <div class="titulo">Estado</div>
+    <div id="estadoAtual" class="painelValor">
+      ...
+    </div>
   </div>
+
+</div>
 
 </div>
 
 <script>
 
-// 🔥 CONFIG FIREBASE
+// 🔥 FIREBASE
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCKa219_gQ7_1Br1fCM-PHW3ev9AEzZZJ8",
+
+  apiKey: "SUA_API_KEY",
   authDomain: "book4so.firebaseapp.com",
   databaseURL: "https://book4so-default-rtdb.firebaseio.com",
   projectId: "book4so"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.database();
 
-// 🔄 TROCAR TELAS
-function mostrarRespostas() {
-  document.getElementById("telaEnviar").classList.remove("ativa");
-  document.getElementById("telaRespostas").classList.add("ativa");
+/* =========================
+   TROCAR TELAS
+========================= */
+
+function mostrarRespostas(){
+
+  document.getElementById("telaEnviar")
+  .classList.remove("ativa");
+
+  document.getElementById("telaRespostas")
+  .classList.add("ativa");
+
 }
 
-function voltar() {
-  document.getElementById("telaRespostas").classList.remove("ativa");
-  document.getElementById("telaEnviar").classList.add("ativa");
+function voltar(){
+
+  document.getElementById("telaRespostas")
+  .classList.remove("ativa");
+
+  document.getElementById("telaEnviar")
+  .classList.add("ativa");
+
 }
 
-// 📊 ABRIR PAINEL
-function abrirPainel() {
-  document.getElementById("telaEnviar").classList.remove("ativa");
-  document.getElementById("telaPainel").classList.add("ativa");
+function abrirPainel(){
+
+  document.getElementById("telaEnviar")
+  .classList.remove("ativa");
+
+  document.getElementById("telaPainel")
+  .classList.add("ativa");
+
 }
 
-function voltarPainel() {
-  document.getElementById("telaPainel").classList.remove("ativa");
-  document.getElementById("telaEnviar").classList.add("ativa");
+function voltarPainel(){
+
+  document.getElementById("telaPainel")
+  .classList.remove("ativa");
+
+  document.getElementById("telaEnviar")
+  .classList.add("ativa");
+
 }
 
-// ✍️ ENVIAR MENSAGEM
-function enviarMensagem() {
+/* =========================
+   ENVIAR MENSAGEM
+========================= */
 
-  const texto = document.getElementById("mensagem").value;
+function enviarMensagem(){
 
-  if (texto.trim() === "") {
+  const texto =
+    document.getElementById("mensagem").value;
+
+  if(texto.trim() === ""){
+
     alert("Escreve algo!");
     return;
+
   }
 
   const contadorRef = db.ref('contadorM');
 
-  contadorRef.transaction((current) => {
+  contadorRef.transaction((current)=>{
+
     return (current || 0) + 1;
+
   })
 
-  .then((result) => {
+  .then((result)=>{
 
     const numero = result.snapshot.val();
 
     return db.ref('respostas/MnhPG' + numero).set({
-      mensagem: texto,
-      data: new Date().toLocaleString()
+
+      mensagem:texto,
+      data:new Date().toLocaleString()
+
     });
 
   })
 
-  .then(() => {
+  .then(()=>{
 
     alert("Enviado!");
+
     document.getElementById("mensagem").value = "";
 
   });
 
 }
 
-// 💌 CARREGAR RESPOSTAS
-const container = document.getElementById("container");
+/* =========================
+   RESPOSTAS
+========================= */
 
-db.ref("respostas").on("value", (snapshot) => {
+const container =
+  document.getElementById("container");
+
+db.ref("respostas").on("value",(snapshot)=>{
 
   container.innerHTML = "";
 
   const dados = snapshot.val();
 
-  if (!dados) return;
+  if(!dados) return;
 
   const ordenado = Object.keys(dados)
 
-    .filter(id => id.startsWith("RSofia"))
+  .filter(id => id.startsWith("RSofia"))
 
-    .sort((a, b) => {
+  .sort((a,b)=>{
 
-      const numA = parseInt(a.replace("RSofia",""));
-      const numB = parseInt(b.replace("RSofia",""));
+    const numA =
+      parseInt(a.replace("RSofia",""));
 
-      return numB - numA;
+    const numB =
+      parseInt(b.replace("RSofia",""));
 
-    });
+    return numB - numA;
 
-  ordenado.forEach(id => {
+  });
+
+  ordenado.forEach(id=>{
 
     const item = dados[id];
 
-    const div = document.createElement("div");
+    const div =
+      document.createElement("div");
 
     div.classList.add("card");
 
     div.innerHTML = `
+
       <div class="titulo">${id}</div>
-      <div class="mensagem">${item.mensagem}</div>
-      <div class="data">${item.data}</div>
+
+      <div class="mensagem">
+        ${item.mensagem}
+      </div>
+
+      <div class="data">
+        ${item.data}
+      </div>
+
     `;
 
     container.appendChild(div);
@@ -274,39 +434,44 @@ db.ref("respostas").on("value", (snapshot) => {
 
 });
 
-// 📈 CONTADOR DE ACESSOS
-db.ref("acessosSo").on("value", (snapshot) => {
+/* =========================
+   ACESSOS
+========================= */
 
-  const total = snapshot.val() || 0;
+db.ref("acessosSo").on("value",(snapshot)=>{
 
-  document.getElementById("acessosSo").innerText =
-    total;
-
-});
-
-// 💌 CONTADOR DE CARTAS
-db.ref("cartaSo").on("value", (snapshot) => {
-
-  const total = snapshot.val() || 0;
-
-  document.getElementById("cartaSo").innerText =
-    total;
+  document.getElementById("acessosSo")
+  .innerText = snapshot.val() || 0;
 
 });
 
-// 💀 ESTADO DO SITE
-db.ref("estadoSite").on("value", (snapshot) => {
+/* =========================
+   CARTAS
+========================= */
+
+db.ref("cartaSo").on("value",(snapshot)=>{
+
+  document.getElementById("cartaSo")
+  .innerText = snapshot.val() || 0;
+
+});
+
+/* =========================
+   ESTADO SITE
+========================= */
+
+db.ref("estadoSite").on("value",(snapshot)=>{
 
   const estado = snapshot.val();
 
-  document.getElementById("estadoAtual").innerText =
-    estado;
+  document.getElementById("estadoAtual")
+  .innerText = estado;
 
-  if (estado === "morto") {
+  if(estado === "morto"){
 
     document.body.classList.add("morto");
 
-  } else {
+  }else{
 
     document.body.classList.remove("morto");
 
