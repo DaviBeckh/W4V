@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PiruZap Wear OS</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<title>PiruZap Wear</title>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -14,179 +19,225 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
-body{
-  font-family:'Segoe UI',sans-serif;
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:sans-serif;
   background:#000;
-  color:white;
+  touch-action:pan-y;
+}
+
+/* 💀 */
+
+body.morto{
+  filter:grayscale(100%) brightness(0.45);
+}
+
+/* APP */
+
+.app{
+
+  width:300vw;
+  height:100vh;
+
+  display:flex;
+
+  transition:transform .35s ease;
+
+}
+
+/* TELAS */
+
+.page{
+
   width:100vw;
   height:100vh;
-  overflow:hidden;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-/* 💀 MODO MORTO */
-body.morto{
-  filter:grayscale(100%) brightness(0.5);
-}
-
-.watch{
-
-  width:100%;
-  height:100%;
-  max-width:390px;
-  max-height:390px;
-
-  border-radius:50%;
-  background:#111;
-
-  overflow:hidden;
-  position:relative;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-}
-
-/* TELA */
-
-.tela{
-  display:none;
-  width:100%;
-  height:100%;
-  padding:25px;
+  flex-shrink:0;
 
   overflow-y:auto;
-}
 
-.ativa{
+  padding:18px;
+
   display:flex;
   flex-direction:column;
   align-items:center;
+
+  scroll-behavior:smooth;
+
 }
 
-/* TÍTULO */
+/* TITULO */
 
-h1{
-  font-size:22px;
-  margin-top:10px;
-  margin-bottom:15px;
-  color:#ff5c8a;
+.logo{
+
+  margin-top:8px;
+
+  font-size:28px;
+  font-weight:700;
+
+  color:#ff5f87;
+
 }
 
 /* INPUT */
 
 textarea{
+
   width:100%;
   height:110px;
 
-  border:none;
-  border-radius:18px;
+  margin-top:18px;
 
-  padding:15px;
+  border:none;
+  outline:none;
 
   resize:none;
 
-  background:#222;
+  border-radius:22px;
+
+  background:#1b1b1b;
+
   color:white;
 
-  outline:none;
+  padding:16px;
 
-  font-size:14px;
+  font-size:15px;
+
 }
 
-/* BOTÕES */
+/* BOTAO */
 
-button{
+.btn{
 
   width:100%;
+
+  margin-top:14px;
+
   border:none;
-  border-radius:20px;
 
-  padding:12px;
+  border-radius:999px;
 
-  margin-top:10px;
+  background:#ff4f79;
 
-  font-size:14px;
+  color:white;
+
+  padding:14px;
+
+  font-size:15px;
   font-weight:bold;
 
-  cursor:pointer;
+}
+
+/* SWIPE DICA */
+
+.swipe{
+
+  margin-top:18px;
+
+  font-size:12px;
+
+  opacity:.5;
 
 }
 
-.enviar{
-  background:#ff4d6d;
-  color:white;
-}
-
-.ver{
-  background:white;
-  color:#ff4d6d;
-}
-
-.voltar{
-
-  position:absolute;
-  top:15px;
-  left:15px;
-
-  width:42px;
-  height:42px;
-
-  border-radius:50%;
-
-  background:#fff;
-  color:#ff4d6d;
-
-  font-size:18px;
-
-}
-
-/* CARD */
+/* CARDS */
 
 .card{
 
   width:100%;
 
-  background:#1f1f1f;
+  background:#171717;
 
-  border-radius:18px;
+  border-radius:24px;
 
-  padding:15px;
+  padding:16px;
 
-  margin-bottom:12px;
+  margin-top:14px;
+
+  color:white;
 
 }
 
 .titulo{
-  color:#ff5c8a;
+
+  color:#ff5f87;
+
   font-weight:bold;
+
   margin-bottom:8px;
+
+  font-size:14px;
+
 }
 
 .mensagem{
+
   font-size:14px;
+
   line-height:1.4;
+
+  word-break:break-word;
+
 }
 
 .data{
-  margin-top:8px;
+
+  margin-top:10px;
+
   font-size:10px;
-  color:#999;
+
+  opacity:.5;
+
   text-align:right;
+
 }
 
-/* PAINEL */
+.valor{
 
-.painelValor{
-  font-size:24px;
+  font-size:32px;
+
   font-weight:bold;
-  margin-top:5px;
+
+}
+
+/* BARRINHAS */
+
+.bolhas{
+
+  position:fixed;
+
+  bottom:10px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  display:flex;
+
+  gap:8px;
+
+}
+
+.bola{
+
+  width:7px;
+  height:7px;
+
+  border-radius:50%;
+
+  background:#555;
+
+  transition:.3s;
+
+}
+
+.bola.active{
+  background:#ff5f87;
 }
 
 /* SCROLL */
@@ -200,81 +251,114 @@ button{
 
 <body>
 
-<div class="watch">
+<div class="app" id="app">
 
-<!-- ✍️ TELA PRINCIPAL -->
-<div id="telaEnviar" class="tela ativa">
+  <!-- ✍️ PAGINA 1 -->
+  <div class="page">
 
-  <h1>PiruZap</h1>
-
-  <textarea id="mensagem" placeholder="Mensagem..."></textarea>
-
-  <button class="enviar" onclick="enviarMensagem()">
-    Enviar
-  </button>
-
-  <button class="ver" onclick="mostrarRespostas()">
-    Chat
-  </button>
-
-  <button class="ver" onclick="abrirPainel()">
-    Painel
-  </button>
-
-</div>
-
-<!-- 💌 RESPOSTAS -->
-<div id="telaRespostas" class="tela">
-
-  <button class="voltar" onclick="voltar()">
-    ←
-  </button>
-
-  <h1>💌</h1>
-
-  <div id="container"></div>
-
-</div>
-
-<!-- 📊 PAINEL -->
-<div id="telaPainel" class="tela">
-
-  <button class="voltar" onclick="voltarPainel()">
-    ←
-  </button>
-
-  <h1>Painel</h1>
-
-  <div class="card">
-    <div class="titulo">Acessos</div>
-    <div id="acessosSo" class="painelValor">0</div>
-  </div>
-
-  <div class="card">
-    <div class="titulo">Cartas</div>
-    <div id="cartaSo" class="painelValor">0</div>
-  </div>
-
-  <div class="card">
-    <div class="titulo">Estado</div>
-    <div id="estadoAtual" class="painelValor">
-      ...
+    <div class="logo">
+      PiruZap
     </div>
+
+    <textarea
+      id="mensagem"
+      placeholder="Mensagem..."
+    ></textarea>
+
+    <button class="btn"
+    onclick="enviarMensagem()">
+
+      Enviar
+
+    </button>
+
+    <div class="swipe">
+      ← arrasta →
+    </div>
+
+  </div>
+
+  <!-- 💌 PAGINA 2 -->
+  <div class="page">
+
+    <div class="logo">
+      💌
+    </div>
+
+    <div id="container"></div>
+
+  </div>
+
+  <!-- 📊 PAGINA 3 -->
+  <div class="page">
+
+    <div class="logo">
+      📊
+    </div>
+
+    <div class="card">
+
+      <div class="titulo">
+        Acessos
+      </div>
+
+      <div class="valor"
+      id="acessosSo">
+        0
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="titulo">
+        Cartas
+      </div>
+
+      <div class="valor"
+      id="cartaSo">
+        0
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="titulo">
+        Estado
+      </div>
+
+      <div class="valor"
+      id="estadoAtual">
+        ...
+      </div>
+
+    </div>
+
   </div>
 
 </div>
+
+<!-- INDICADORES -->
+
+<div class="bolhas">
+
+  <div class="bola active"></div>
+  <div class="bola"></div>
+  <div class="bola"></div>
 
 </div>
 
 <script>
 
-// 🔥 FIREBASE
+/* 🔥 FIREBASE */
 
 const firebaseConfig = {
 
   apiKey: "SUA_API_KEY",
   authDomain: "book4so.firebaseapp.com",
-  databaseURL: "https://book4so-default-rtdb.firebaseio.com",
+  databaseURL:
+  "https://book4so-default-rtdb.firebaseio.com",
   projectId: "book4so"
 
 };
@@ -284,81 +368,112 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 /* =========================
-   TROCAR TELAS
+   SWIPE ENTRE TELAS
 ========================= */
 
-function mostrarRespostas(){
+const app =
+document.getElementById("app");
 
-  document.getElementById("telaEnviar")
-  .classList.remove("ativa");
+const bolas =
+document.querySelectorAll(".bola");
 
-  document.getElementById("telaRespostas")
-  .classList.add("ativa");
+let pagina = 0;
 
-}
+function atualizarPagina(){
 
-function voltar(){
+  app.style.transform =
+  `translateX(-${pagina * 100}vw)`;
 
-  document.getElementById("telaRespostas")
-  .classList.remove("ativa");
+  bolas.forEach((b,i)=>{
 
-  document.getElementById("telaEnviar")
-  .classList.add("ativa");
+    b.classList.toggle(
+      "active",
+      i === pagina
+    );
 
-}
-
-function abrirPainel(){
-
-  document.getElementById("telaEnviar")
-  .classList.remove("ativa");
-
-  document.getElementById("telaPainel")
-  .classList.add("ativa");
+  });
 
 }
 
-function voltarPainel(){
+let startX = 0;
 
-  document.getElementById("telaPainel")
-  .classList.remove("ativa");
+document.addEventListener(
+"touchstart",
 
-  document.getElementById("telaEnviar")
-  .classList.add("ativa");
+e=>{
 
-}
+  startX =
+  e.touches[0].clientX;
+
+});
+
+document.addEventListener(
+"touchend",
+
+e=>{
+
+  let endX =
+  e.changedTouches[0].clientX;
+
+  let diff =
+  startX - endX;
+
+  if(diff > 50 && pagina < 2){
+
+    pagina++;
+    atualizarPagina();
+
+  }
+
+  if(diff < -50 && pagina > 0){
+
+    pagina--;
+    atualizarPagina();
+
+  }
+
+});
 
 /* =========================
-   ENVIAR MENSAGEM
+   ENVIAR
 ========================= */
 
 function enviarMensagem(){
 
   const texto =
-    document.getElementById("mensagem").value;
+  document.getElementById(
+    "mensagem"
+  ).value;
 
   if(texto.trim() === ""){
 
-    alert("Escreve algo!");
-    return;
+    return alert("Escreve algo");
 
   }
 
-  const contadorRef = db.ref('contadorM');
+  const contadorRef =
+  db.ref('contadorM');
 
-  contadorRef.transaction((current)=>{
+  contadorRef.transaction(
+  current => {
 
     return (current || 0) + 1;
 
   })
 
-  .then((result)=>{
+  .then(result=>{
 
-    const numero = result.snapshot.val();
+    const numero =
+    result.snapshot.val();
 
-    return db.ref('respostas/MnhPG' + numero).set({
+    return db.ref(
+    'respostas/MnhPG' + numero
+
+    ).set({
 
       mensagem:texto,
-      data:new Date().toLocaleString()
+      data:new Date()
+      .toLocaleString()
 
     });
 
@@ -366,57 +481,69 @@ function enviarMensagem(){
 
   .then(()=>{
 
-    alert("Enviado!");
-
-    document.getElementById("mensagem").value = "";
+    document.getElementById(
+    "mensagem"
+    ).value = "";
 
   });
 
 }
 
 /* =========================
-   RESPOSTAS
+   CHAT
 ========================= */
 
 const container =
-  document.getElementById("container");
+document.getElementById(
+"container"
+);
 
-db.ref("respostas").on("value",(snapshot)=>{
+db.ref("respostas")
+.on("value",snapshot=>{
 
   container.innerHTML = "";
 
-  const dados = snapshot.val();
+  const dados =
+  snapshot.val();
 
   if(!dados) return;
 
-  const ordenado = Object.keys(dados)
+  const ordenado =
+  Object.keys(dados)
 
-  .filter(id => id.startsWith("RSofia"))
+  .filter(id =>
+    id.startsWith("RSofia")
+  )
 
   .sort((a,b)=>{
 
-    const numA =
-      parseInt(a.replace("RSofia",""));
+    return parseInt(
+      b.replace("RSofia","")
+    )
 
-    const numB =
-      parseInt(b.replace("RSofia",""));
+    -
 
-    return numB - numA;
+    parseInt(
+      a.replace("RSofia","")
+    );
 
   });
 
   ordenado.forEach(id=>{
 
-    const item = dados[id];
+    const item =
+    dados[id];
 
     const div =
-      document.createElement("div");
+    document.createElement("div");
 
     div.classList.add("card");
 
     div.innerHTML = `
 
-      <div class="titulo">${id}</div>
+      <div class="titulo">
+        ${id}
+      </div>
 
       <div class="mensagem">
         ${item.mensagem}
@@ -435,45 +562,54 @@ db.ref("respostas").on("value",(snapshot)=>{
 });
 
 /* =========================
-   ACESSOS
+   CONTADORES
 ========================= */
 
-db.ref("acessosSo").on("value",(snapshot)=>{
+db.ref("acessosSo")
+.on("value",snapshot=>{
 
-  document.getElementById("acessosSo")
-  .innerText = snapshot.val() || 0;
+  document.getElementById(
+  "acessosSo"
+  ).innerText =
+
+  snapshot.val() || 0;
+
+});
+
+db.ref("cartaSo")
+.on("value",snapshot=>{
+
+  document.getElementById(
+  "cartaSo"
+  ).innerText =
+
+  snapshot.val() || 0;
 
 });
 
 /* =========================
-   CARTAS
+   ESTADO
 ========================= */
 
-db.ref("cartaSo").on("value",(snapshot)=>{
+db.ref("estadoSite")
+.on("value",snapshot=>{
 
-  document.getElementById("cartaSo")
-  .innerText = snapshot.val() || 0;
+  const estado =
+  snapshot.val();
 
-});
-
-/* =========================
-   ESTADO SITE
-========================= */
-
-db.ref("estadoSite").on("value",(snapshot)=>{
-
-  const estado = snapshot.val();
-
-  document.getElementById("estadoAtual")
-  .innerText = estado;
+  document.getElementById(
+  "estadoAtual"
+  ).innerText = estado;
 
   if(estado === "morto"){
 
-    document.body.classList.add("morto");
+    document.body
+    .classList.add("morto");
 
   }else{
 
-    document.body.classList.remove("morto");
+    document.body
+    .classList.remove("morto");
 
   }
 
